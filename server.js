@@ -20,6 +20,7 @@ const PORT = process.env.PORT || 3500;
 legoData
   .initialize()
   .then(() => {
+    app.set("views", __dirname + "/views");
     app.use(express.static("public"));
     app.get("/", (req, res) => {
       res.sendFile(path.join(__dirname, "/views/home.html"));
