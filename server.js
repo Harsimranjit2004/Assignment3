@@ -14,16 +14,17 @@
 
 const express = require("express");
 require("dotenv").config();
-const legoData = require("./modules/legoSets"); // Update if this path changes in Vercel's directory structure
+const legoData = require("./modules/legoSets");
 const path = require("path");
 const app = express();
+const PORT = process.env.PORT || 3500;
 
 app.set("view engine", "ejs");
 
 legoData
   .initialize()
   .then(() => {
-    app.use(express.static(path.join(__dirname, "../public")));
+    app.use(express.static(path.join(__dirname, "/public")));
 
     // Home route
     app.get("/", (req, res) => {
@@ -43,6 +44,7 @@ legoData
           .getSetsByTheme(theme)
           .then((sets) => {
             if (sets.length === 0) {
+              // No sets found for the specified theme
               res.status(404).render("404", {
                 page: "/lego/sets",
                 message: `No sets found for theme: ${theme}`,
@@ -77,6 +79,7 @@ legoData
         .getSetByNum(numId)
         .then((set) => {
           if (!set) {
+            // No set found with the specified ID
             res.status(404).render("404", {
               page: "/lego/sets",
               message: `No set found with ID: ${numId}`,
@@ -99,8 +102,10 @@ legoData
         message: "The page you're looking for doesn't exist.",
       });
     });
+
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`Server running on ${PORT}`);
+    });
   })
   .catch((err) => console.log(`Failed due to ${err}`));
-
-// Export the app for Vercel serverless functions
-module.exports = app;
