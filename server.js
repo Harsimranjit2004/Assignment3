@@ -14,7 +14,7 @@
 
 const express = require("express");
 require("dotenv").config();
-const legoData = require("../modules/legoSets"); // Update if this path changes in Vercel's directory structure
+const legoData = require("./modules/legoSets"); // Update if this path changes in Vercel's directory structure
 const path = require("path");
 const app = express();
 
